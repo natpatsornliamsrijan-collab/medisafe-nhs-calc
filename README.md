@@ -1,110 +1,108 @@
-# 💊 Med-Tracker: Medication Expiry Helper (Multi-Standard)
+# 💊 Med-Tracker: Medication Expiry Helper (Dual-Validation System)
 
-**Med-Tracker** is a Python-based project I developed to bridge my professional background in pharmacy with my journey into software development. It calculates the **Beyond-Use Date (BUD)** to ensure medicines remain safe and effective after being opened or repacked.
+**Med-Tracker** is a Python-based utility designed to support medication safety by calculating the most appropriate expiry limit after opening or repacking. 
+
+The system performs a **dual-validation process** by comparing the manufacturer’s original expiry date with the **Beyond-Use Date (BUD)**, which applies once a product has been opened or transferred from its original packaging.
 
 ---
 
 ## 💡 Why I Built This
-In pharmacy practice, I observed a common risk: **The expiry date on the box is not the same as the safe period after opening.**
 
-Factors like humidity, microbial exposure, and oxidation start affecting the medicine the moment the seal is broken. While pharmacists explain this, labels fade and dates are forgotten—especially for elderly patients managing multiple medications (polypharmacy). I built this tool to turn complex medical guidelines into a practical, digital safety check.
+During my pharmacy practice, I observed a recurring safety issue: **The expiry date printed on a medicine box does not automatically apply after the product has been opened.**
+
+Once the seal is broken, environmental factors such as humidity, oxidation, and microbial exposure begin to affect stability. For example, sterile eye drops may have a shelf life of two years, yet after opening, they are typically safe for only 28 to 30 days.
+
+
+
+**This project was developed to:**
+* **Automate** the comparison between manufacturer shelf life and in-use stability.
+* **Support** patients managing multiple medications (polypharmacy) without manual calculation.
+* **Apply** internationally recognized guidance from **NHS** and **Thai FDA** standards, taking climate differences into account.
 
 ---
 
-## 📋 Project Overview
-This command-line tool allows users to:
-* **Select a Language/Standard:** Switch between English-Deutsch (NHS Standard) and ภาษาไทย (Thai FDA/USP Standard).
-* **Select a Medication Category:** Choose from 12 specific categories with terminology in all three languages.
-* **Enter the Opening Date:** Simply input the date in DD/MM/YYYY format.
-* **Receive a Calculated Status:** Instant feedback: ✅ SAFE, ⚠️ NEAR EXPIRY, or ❌ EXPIRED.
+## 📋 Key Features
+
+* **Dual-Validation Logic:** Automatically determines which limit occurs first: manufacturer expiry or BUD.
+* **Localized Standards:** Selectable **English/Deutsch** mode (based on NHS guidance) and **Thai** mode (based on Thai FDA/USP guidance).
+* **Storage-Specific Antibiotic Logic:** Specialized calculations for reconstituted antibiotic syrups with two stability windows:
+    * **Room Temperature Storage:** 7 days.
+    * **Refrigerated Storage (2°C - 8°C):** 14 days.
+* **Built-in Safety Restrictions:** Prevents calculation for "repacked" sterile eye or ear drops to ensure patient safety.
+* **Step-by-Step Date Entry:** Reduces formatting errors by requesting Day, Month, and Year separately.
+* **Multilingual Interface:** Full support for English, German, and Thai terminology.
 
 ---
 
-## 📖 Medical Reference & Guideline Comparison
-The logic in this tool is inspired by publicly available guidance documents:
+## 🔬 Medical Reference and Stability Logic
 
-### ⚖ Scope & Regulatory Clarification
+Stability recommendations differ depending on the climate zone and regulatory framework. This tool integrates logic derived from publicly available NHS guidance and Thai FDA/USP-based recommendations.
 
-This tool is designed as an educational comparison of publicly available guidance (NHS and Thai FDA/USP-based frameworks). 
+### ⏳ Stability Rules Implemented
 
-It does not replace:
-• Product-specific Summary of Product Characteristics (SPC / Fachinformation)
-• National pharmacy compounding standards (e.g., DAC/NRF in Germany)
-• Individual manufacturer storage instructions
-
-Expiry rules may vary depending on formulation, preservatives, packaging type, and national regulation. 
-
-The implemented logic represents simplified safety-oriented interpretations for learning and demonstration purposes.
-
-### 🔬 Comparative Analysis: NHS vs. Thai FDA (USP 795)
-As a pharmacist, I understand that stability guidelines must adapt to local contexts:
-
-* **NHS (UK/Europe):** Optimized for Climate Zone I/II (Temperate). It offers a balanced approach for stable environments.
-* **Thai FDA (Thailand):** Based on USP 795 and adapted for Climate Zone IVb (Hot & Very Humid).
-    * **The Liquid Paradox:** Unlike the NHS, the Thai FDA is significantly stricter on Repacked Oral Liquids (14 days) because high humidity and temperature dramatically increase the risk of microbial growth.
-    * **Repacked Solids:** Conversely, it allows up to 6 months (180 days) for tablets/powders in certain conditions, whereas European standards often suggest stricter limits for MDS packs.
-
-### ⏳ Example Expiry Rules (Implemented Logic)
-
-| Formulation | NHS (UK/EU) | Thai FDA (USP) | Note |
+| Category | NHS (UK/EU) | Thai FDA (USP) | Condition / Storage |
 | :--- | :--- | :--- | :--- |
-| MDS / Weekly Blister | 56 Days | 180 Days | Based on local solid stability |
-| Oral Liquids (Repacked) | 180 Days | 14 Days | Strict microbial control (Zone IVb) |
-| Decanted Medicine | 30 Days | 180 Days | Standard vs. Safety Choice |
-| Eye / Ear Drops | 28 Days | 30 Days | Global standard for multi-dose |
-| Creams (Aqueous) | 30 Days | 30 Days | High water activity limits |
-| Insulin (In Use) | 28 Days | 28 Days | Standard protein stability |
-
----
-
-## ⚠️ If the Opening Date Is Unknown
-* Use the dispensing date as a rough reference point.
-* **Observe Physical Changes:** Discard immediately if the smell, color, or texture has changed.
-* **Write it down:** Always record the opening date on the label for future safety.
-* **Consult a Pharmacist:** When in doubt, safety always comes first.
+| **Tablets and Capsules** | 56 days | 180 days | MDS or repacked |
+| **Oral liquids** | 30 days | 14 days | Increased microbial risk (Repacked) |
+| **Antibiotic syrup** | **7 or 14 days** | **7 or 14 days** | **Room Temp vs. Refrigeration** |
+| **Cream in jar** | 30 days | 90 days | Aqueous formulation |
+| **Cream/Ointment in tube** | 90 days | 90 days | Tube packaging |
+| **Sterile multi-dose drops** | 28 days | 30 days | Eye or ear drops |
+| **Single-use sterile drops** | 1 day | 1 day | Preservative-free |
+| **Insulin in use** | 28 days | 28 days | In-use protein stability |
+| **Inhaler (MDI)** | Label Expiry | Label Expiry | Follow manufacturer label |
 
 ---
 
 ## 🚀 How to Use
-1.  Run the Python script:
+
+1.  **Run the script:**
     
 bash
     python med_tracker.py
     
 
-2.  Choose your preferred standard/language:
-    * 1 for English-Deutsch (NHS-EU)
-    * 2 for ภาษาไทย (Thai FDA-USP)
-3.  Select the medication type from the menu (1-12).
-4.  Enter the opening date (`DD/MM/YYYY`).
-5.  The system will calculate the remaining days and display the safety status.
+2.  **Follow the guided prompts:**
+    * Select your preferred language and standard.
+    * Choose the medication category (1-9).
+    * **For antibiotics:** Select your actual storage condition (Room vs. Fridge).
+    * **Enter dates:** Input the Day, Month, and Year step-by-step as prompted.
+3.  **The system displays:**
+    * Calculated Beyond-Use Date (BUD).
+    * Remaining days until expiry.
+    * Safety status: ✅ **SAFE** or 🛑 **EXPIRED**.
 
 ---
 
 ## 🛠 Technical Stack
+
 * **Language:** Python 3
-* **Modules:** datetime (For precise date arithmetic).
-* **Data Structure:** Dictionary-based dual-logic engine.
-* **Localization:** Fully supports English (EN), German (DE), and Thai (TH).
+* **Modules:** datetime (for precise date arithmetic).
+* **Logic:** Dictionary-based rule engine with sterile_warning and is_antibiotic flags.
 
 ---
 
-## 📌 What I Learned
-* **Domain-Driven Design:** Translating complex medical PDFs and regulatory documents into functional code logic.
-* **Global Regulatory Analysis:** Comparing international pharmaceutical standards and understanding the "why" behind different safety margins (Climate factors).
-* **User-Centric Programming:** Designing a CLI that handles user errors (invalid dates) gracefully.
+## 📌 Development Journey
 
-> **Development Note:**
-> I used AI as a coding assistant while learning. The project idea, multilingual structure, and comparative medical reasoning are based on my professional experience as a pharmacist and research into global stability standards.
+This project demonstrates the intersection of healthcare expertise and software engineering:
+* **Translation of pharmaceutical regulatory guidance** into structured program logic.
+* **Safety-focused conditional logic**, including storage-dependent antibiotic stability.
+* **Input validation design** to reduce user error in date formatting.
+
+> **Professional Background Note:**
+> The medical reasoning and stability interpretation are based on clinical pharmacy training and publicly available regulatory guidance. AI was used as a coding assistant for structural refinement and formatting.
 
 ---
 
 ## 📚 Sources
-* **Thai FDA:** Guidelines for Assigning Beyond-Use Dates (BUD) for Medicinal Products in Healthcare Facilities (Ref: USP 795).
-* **NHS England:** Guidance Sheet 6 – Storage and Expiry Dates.
-* **ICH Q1A (R2):** Stability Testing Reference for Climate Zones.
+
+* **Thai FDA:** Guidelines for Assigning Beyond-Use Dates (BUD) in Healthcare Facilities.
+* **NHS England:** Guidance Sheet 6 - Storage and Expiry Dates.
+* **USP <795>:** Pharmaceutical Compounding - Nonsterile Preparations.
 
 ---
 
 ## ⚖️ Disclaimer
-This tool is for educational purposes only. Always verify information using official pharmacy labels and manufacturer instructions.
+
+This tool is intended for **educational and informational purposes only**. 
+It does not replace professional medical advice or official manufacturer instructions. Always verify information using the physical label and consult a pharmacist when in doubt.
