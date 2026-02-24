@@ -1,63 +1,53 @@
-import pyttsx3
-import time
+mport time
 from datetime import datetime, timedelta
 
-# --- 1. ตั้งค่าระบบเสียง ---
-engine = pyttsx3.init()
-engine.setProperty('rate', 135) 
-
+# --- 1. Notification System ---
 def announce(text):
     print(f"\n>>> {text.upper()} <<<")
-    engine.say(text)
-    engine.runAndWait()
 
-# --- 2. ข้อมูลยาอ้างอิงจาก NHS (เหลือ 12 รายการ) ---
+# --- 2. Medication Data (Updated with Temperature Guidance) ---
 CATEGORIES = {
-    "1": {"name": "MDS / Weekly Blister Pack (ยาเม็ดจัดแผงรายสัปดาห์)", "days": 56},
-    "2": {"name": "Original Manufacturer Blister (ยาเม็ดในแผงฟอยล์เดิม)", "days": 365},
-    "3": {"name": "Decanted Medicine (ยาที่แบ่งใส่ขวดใหม่)", "days": 30},
-    "4": {"name": "Oral Liquid / Syrup (ยาน้ำกินหลังเปิดขวด)", "days": 180},
-    "5": {"name": "Reconstituted Antibiotics (ยาปฏิชีวนะผสมน้ำแล้ว)", "days": 7},
-    "6": {"name": "Topical Cream in Jar (ยาทากระปุก)", "days": 30},
-    "7": {"name": "Topical Tube - SKIN ONLY (ยาทาหลอด-ใช้ทาผิวเท่านั้น)", "days": 90},
-    "8": {"name": "Medicated Lotion (โลชั่นยา)", "days": 180},
+    "1": {"name": "MDS / Weekly Blister Pack (จัดแผงรายสัปดาห์ / Wöchentliche Blisterpackung)", "days": 56},
+    "2": {"name": "Original Manufacturer Blister (แผงฟอยล์เดิม / Originalblister)", "days": 365},
+    "3": {"name": "Decanted Medicine (แบ่งใส่ขวดใหม่ / Umgefüllte Medikamente)", "days": 30},
+    "4": {"name": "Oral Liquid / Syrup (ยาน้ำทั่วไป / Saft oder Sirup)", "days": 180},
     
-    # --- หมวดหมู่ยาตา (แบบมาตรฐาน) ---
-    "9": {"name": "Standard Eye/Ear Drops (ยาหยอดตาหรือหูทั่วไป - 1 เดือน)", "days": 28},
-    "10": {"name": "Single-use Units (ยาหยอดตาแบบกระเปาะเล็กรายวัน)", "days": 1},
+    # --- ปรับปรุงข้อ 5: ยาปฏิชีวนะแยกตามอุณหภูมิ ---
+    "5": {"name": "Antibiotics (Room Temp) (ยาปฏิชีวนะผสมน้ำ-อุณหภูมิห้อง / Antibiotika bei Raumtemp)", "days": 7},
+    "6": {"name": "Antibiotics (Fridge) (ยาปฏิชีวนะผสมน้ำ-แช่เย็น / Antibiotika im Kühlschrank)", "days": 14},
     
-    "11": {"name": "Insulin Pen / Vial - In Use (อินซูลินหลังเริ่มใช้)", "days": 28},
-    "12": {"name": "Inhaler / MDI (ยาพ่น)", "days": 365}
+    "7": {"name": "Topical Cream in Jar (ยาทากระปุก / Creme im Tiegel)", "days": 30},
+    "8": {"name": "Topical Tube - SKIN ONLY (ยาทาหลอด / Tube für die Haut)", "days": 90},
+    "9": {"name": "Standard Eye/Ear Drops (ยาหยอดตาหรือหู / Augen- oder Ohrentropfen)", "days": 28},
+    "10": {"name": "Single-use Units (ยาหยอดตารายวัน / Einzeldosen)", "days": 1},
+    "11": {"name": "Insulin Pen / Vial (อินซูลินที่กำลังใช้ / Insulin im Gebrauch)", "days": 28},
+    "12": {"name": "Inhaler / MDI (ยาพ่น / Inhalator)", "days": 365}
 }
 
 def start_app():
     print("========================================")
     print("    MEDISAFE: NHS STORAGE GUIDANCE      ")
     print("========================================")
-    announce("Welcome. I will help you check your medicine.")
+    print("Welcome. This tool helps you check medicine expiry dates.")
     
-    announce("Please listen to the categories:")
+    print("\nPLEASE SELECT A CATEGORY:")
     for key, val in CATEGORIES.items():
         print(f"  [{key}] {val['name']}")
-        engine.say(f"Option {key}: {val['name']}")
-        engine.runAndWait()
-        time.sleep(0.05)
 
     choice = input("\nSELECT NUMBER (1-12): ")
 
     if choice in CATEGORIES:
         selected = CATEGORIES[choice]
-        announce(f"You selected {selected['name']}")
+        announce(f"Selected: {selected['name']}")
         
-        # --- คำเตือนพิเศษ ---
-        if choice == "7":
-            announce("Warning: This is for skin use only. Do not put in eyes.")
-        elif choice == "10":
-            announce("Safety Alert: This is preservative-free. Discard within 24 hours.")
+        # --- คำแนะนำเพิ่มเติมเรื่องตู้เย็น ---
+        if choice == "6":
+            print("(!) Note: Store between 2°C and 8°C. Do not freeze.")
+        elif choice == "7":
+            print("(!) Warning: For skin use only. Do not put in eyes.")
 
         print("\n--- ENTER DATE OF OPENING ---")
         try:
-            # ลำดับการกรอก: วัน -> เดือน -> ปี
             d = int(input("DAY   (DD):   "))
             m = int(input("MONTH (MM):   "))
             y = int(input("YEAR  (YYYY): "))
@@ -66,23 +56,20 @@ def start_app():
             expiry_date = open_date + timedelta(days=selected['days'])
             days_left = (expiry_date - datetime.now()).days
 
-            print("\n" + "*"*40)
+            print("\n" + "*"*45)
             if days_left < 0:
-                print("!!! WARNING: DISCARD IMMEDIATELY !!!")
-                announce(f"Warning! This medicine is expired. Please dispose of it safely.")
-            elif days_left <= 7:
-                print("!!! CAUTION: NEAR EXPIRY !!!")
-                announce(f"Be careful. It will expire in {days_left} days.")
+                print("!!!  WARNING: EXPIRED - DISCARD IMMEDIATELY  !!!")
+                print(f"Expired on: {expiry_date.strftime('%d/%m/%Y')}")
             else:
-                print("       STATUS: SAFE TO USE      ")
-                announce(f"Safe to use. It expires on {expiry_date.strftime('%d/%m/%Y')}.")
-                print(f"Days remaining: {days_left}")
-            print("*"*40)
+                print("            STATUS: SAFE TO USE            ")
+                print(f"Calculated Expiry: {expiry_date.strftime('%d/%m/%Y')}")
+                print(f"Days remaining: {days_left} days")
+            print("*"*45)
 
         except ValueError:
-            announce("Invalid date. Please use numbers only.")
+            print("\nError: Invalid date format.")
     else:
-        announce("Invalid choice.")
+        print("\nError: Invalid choice.")
 
 if __name__ == "__main__":
     start_app()
