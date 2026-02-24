@@ -1,53 +1,106 @@
-# 💊 MediSafe: NHS-Standard Medication Expiry Calculator
+# 💊 MediSafe – Medication Expiry Helper (NHS-Based)
 
-A Python tool designed to improve patient safety by calculating the precise expiry date of medications after they have been opened. This project is specifically tailored for care home settings and individuals managing multiple medications (Polypharmacy).
+MediSafe is a small Python project I built while learning programming. It helps calculate how long medicines remain safe to use after opening.
 
-## 💡 Why I built this
-During my experience in pharmacy, I noticed that many patients were unsure about how long medicines remain safe after opening. Especially in care homes where multiple medications are used, incorrect expiry tracking can pose risks. This project combines my healthcare background with my interest in software development to create a practical safety tool.
+The idea connects my background in pharmacy with my current journey into software development.
+
+---
+
+## 💡 Why I Built This
+During my time working in pharmacy, I noticed that many people were unsure about one important detail:
+
+**The expiry date printed on the box is not always the same as the safe period after opening.**
+
+For example, eye drops may show a manufacturer expiry date years in the future, but once opened they are usually only safe for around 28 days. The same applies to insulin, oral liquids, and certain creams.
+
+Even when pharmacists explain this clearly, patients or caregivers may forget the details later at home. Labels can fade, opening dates may not be written down, and confusion can happen easily — especially in elderly patients managing multiple medications (polypharmacy).
+
+I built this project as a simple way to turn medical guidance into something practical and easy to check again later.
+
+---
 
 ## 📋 Project Overview
-Many medications have a shortened shelf life once the original seal is broken. This tool helps users:
-1. **Select** the correct medication category (supports English, Thai, and German terms).
-2. **Enter** the date of opening (Day/Month/Year).
-3. **Receive** an instant expiry date calculation and voice notification (Text-to-Speech).
+This is a simple command-line tool that allows users to:
+1. **Select a medication category** (English, Thai, and German terms supported)
+2. **Enter the opening date** (DD/MM/YYYY)
+3. **Receive a calculated expiry date**
+4. **See a clear status message** (Safe / Near Expiry / Expired)
 
-## 📖 NHS Guidance & Medical Reference
-The logic in this software is based on **NHS Guidance Sheet 6: Storage and Expiry Dates**.
+The focus is clarity and safety rather than complexity.
 
-### ⏳ Table of Suggested Expiry (After Opening)
-| Formulation | Suggested Expiry | Deutsch (German) |
-| :--- | :--- | :--- |
-| **MDS / Weekly Blister Pack** | 56 Days (8 Weeks) | Wöchentliche Blisterpackung |
-| **Oral Liquids / Syrup** | 6 Months (180 Days) | Saft oder Sirup |
-| **Eye, Ear, Nose Drops** | 1 Month (28 Days) | Augen-, Ohren-, Nasentropfen |
-| **Topical Tubes (Skin)** | 3 Months (90 Days) | Tube für die Haut |
-| **Insulin (In-use)** | 4 Weeks (28 Days) | Insulin im Gebrauch |
-| **Inhalers** | Manufacturer's Expiry | Inhalator |
+---
 
-### ⚠️ Handling Uncertainty (If Date is Forgotten)
-Safety is our top priority. If the opening date is unknown:
-* **Use Dispensed Date:** Use the date the medicine was received as a starting point.
-* **Physical Inspection:** Discard if appearance, color, or smell has changed.
-* **Consult a Professional:** When in doubt, contact a community pharmacist immediately.
-* **Proactive Tracking:** Always write the opening date on the label upon opening.
+## 📖 Medical Reference
+The expiry logic is based on:
+> **NHS Guidance Sheet 6 – Storage and Expiry Dates**
 
-## 🌡️ Key Storage Principles
-* **Original Packaging:** Keep medicines in their original outer packaging to protect from sunlight.
-* **Temperature Control:** Store in a cool, dry place (below 25°C) unless refrigeration is required (2°C - 8°C).
-* **Batch Integrity:** Never mix different batches of medication.
+This helped me translate real healthcare rules into program logic.
+
+### ⏳ Example Expiry Rules After Opening
+| Formulation | Suggested Expiry |
+| :--- | :--- |
+| MDS / Weekly Blister Pack | 56 Days |
+| Oral Liquids / Syrup | 6 Months |
+| Eye, Ear, Nose Drops | 28 Days |
+| Topical Cream (Tube) | 3 Months |
+| Insulin (In Use) | 28 Days |
+| Inhalers | Manufacturer’s Expiry Date |
+
+---
+
+## ⚠️ If the Opening Date Is Unknown
+If someone does not remember the opening date:
+* Use the dispensing date as a rough reference
+* Discard the medicine if appearance or smell has changed
+* Ask a pharmacist if unsure
+* Write the opening date clearly on the label next time
+
+**Safety should always come first.**
+
+---
+
+## 🌡️ Storage Principles Reflected in the Tool
+* Store below 25°C unless refrigeration is required
+* Keep medicines in original packaging
+* Do not mix different batches
+* Follow manufacturer instructions when in doubt
+
+---
 
 ## 🚀 How to Use
 1. Run the Python script `medisafe.py`.
-2. Listen to the voice options (TTS enabled).
-3. Select your medication type (1-12).
-4. Enter the opening date in **DD/MM/YYYY** format.
-5. The system will alert you if the medicine is safe or must be discarded.
+2. Select your medication type from the menu (1-12).
+3. Enter the opening date in **DD/MM/YYYY** format.
+4. The system will calculate the expiry and alert you if the medicine is safe or must be discarded.
 
 ---
-**Data Sources:**
-* NHS Gloucestershire Health and Care: Good Practice Guidance for Expiry Dates.
-* NHS Cheshire Formulary: Storage and Expiry Dates Guidance (Sheet 6).
 
-**Disclaimer:** This tool is for educational purposes. Always verify with the physical label provided by your pharmacist and the manufacturer's instructions.
+## 🛠 Technical Stack
+* **Python 3**
+* **`datetime` module** (For accurate date calculations)
+* **Command-line interface** (Simple CLI interaction)
+* **Dictionary-based data structure**
+
 ---
-**Disclaimer:** This tool is for educational purposes and to assist in tracking. Always verify with the physical label provided by your pharmacist and the manufacturer's instructions.
+
+## 📌 What I Learned
+Through this project, I practiced:
+* Turning written healthcare guidelines into logical conditions.
+* Working with date calculations in Python.
+* Structuring categorized data clearly.
+* Designing a simple and readable user interface.
+* Connecting prior professional knowledge with programming.
+
+**Development Note:**
+I used AI as a coding assistant while learning. The project idea, structure, and medical reasoning are based on my own experience and research.
+
+---
+
+## 📚 Sources
+* **NHS Gloucestershire Health and Care** – Good Practice Guidance for Expiry Dates
+* **NHS Cheshire Formulary** – Storage and Expiry Dates Guidance (Sheet 6)
+
+---
+
+## ⚖️ Disclaimer
+This tool is for educational purposes only. Always verify information using official pharmacy labels and manufacturer instructions.
