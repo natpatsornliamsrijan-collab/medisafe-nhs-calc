@@ -1,6 +1,6 @@
-# 💊 MediSafe – Medication Expiry Helper (NHS-Based)
+# 💊 Med-Tracker: Medication Expiry Helper (NHS-Based)
 
-MediSafe is a small Python project I built while learning programming. It helps calculate how long medicines remain safe to use after opening.
+Med-Tracker is a small Python project I built while learning programming. It helps calculate how long medicines remain safe to use after opening.
 
 The idea connects my background in pharmacy with my current journey into software development.
 
@@ -50,20 +50,20 @@ This helped me translate real healthcare rules into program logic.
 
 ## ⚠️ If the Opening Date Is Unknown
 If someone does not remember the opening date:
-* Use the dispensing date as a rough reference
-* Discard the medicine if appearance or smell has changed
-* Ask a pharmacist if unsure
-* Write the opening date clearly on the label next time
+* Use the dispensing date as a rough reference.
+* Discard the medicine if appearance or smell has changed.
+* Ask a pharmacist if unsure.
+* Write the opening date clearly on the label next time.
 
 **Safety should always come first.**
 
 ---
 
 ## 🌡️ Storage Principles Reflected in the Tool
-* Store below 25°C unless refrigeration is required
-* Keep medicines in original packaging
-* Do not mix different batches
-* Follow manufacturer instructions when in doubt
+* Store below 25°C unless refrigeration is required.
+* Keep medicines in original packaging.
+* Do not mix different batches.
+* Follow manufacturer instructions when in doubt.
 
 ---
 
