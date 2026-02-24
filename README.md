@@ -1,105 +1,108 @@
-# 💊 Med-Tracker: Medication Expiry Helper (NHS-Based)
+# 💊 Med-Tracker: Medication Expiry Helper (Multi-Standard)
 
-Med-Tracker is a small Python project I built while learning programming. It helps calculate how long medicines remain safe to use after opening. 
-
-The idea connects my background in pharmacy with my current journey into software development, aiming to bridge the gap between medical standards and everyday safety.
+**Med-Tracker** is a Python-based project I developed to bridge my professional background in pharmacy with my journey into software development. It calculates the **Beyond-Use Date (BUD)** to ensure medicines remain safe and effective after being opened or repacked.
 
 ---
 
 ## 💡 Why I Built This
-During my time working in pharmacy, I noticed that many people were unsure about one important detail:
+In pharmacy practice, I observed a common risk: **The expiry date on the box is not the same as the safe period after opening.**
 
-**The expiry date printed on the box is not always the same as the safe period after opening.**
-
-For example, eye drops may show a manufacturer expiry date years in the future, but once opened they are usually only safe for around 28 days. The same applies to insulin, oral liquids, and certain creams.
-
-Even when pharmacists explain this clearly, patients or caregivers may forget the details later at home. Labels can fade, opening dates may not be written down, and confusion can happen easily — especially in elderly patients managing multiple medications (polypharmacy).
-
-I built this project as a simple way to turn medical guidance into something practical and easy to check again later.
+Factors like humidity, microbial exposure, and oxidation start affecting the medicine the moment the seal is broken. While pharmacists explain this, labels fade and dates are forgotten—especially for elderly patients managing multiple medications (polypharmacy). I built this tool to turn complex medical guidelines into a practical, digital safety check.
 
 ---
 
 ## 📋 Project Overview
-This is a simple command-line tool that allows users to:
-1. **Select a medication category** (English, Thai, and German terms supported)
-2. **Enter the opening date** (DD/MM/YYYY)
-3. **Receive a calculated expiry date**
-4. **See a clear status message** (Safe / Near Expiry / Expired)
-
-The focus is clarity and safety rather than complexity.
+This command-line tool allows users to:
+* **Select a Language/Standard:** Switch between English-Deutsch (NHS Standard) and ภาษาไทย (Thai FDA/USP Standard).
+* **Select a Medication Category:** Choose from 12 specific categories with terminology in all three languages.
+* **Enter the Opening Date:** Simply input the date in DD/MM/YYYY format.
+* **Receive a Calculated Status:** Instant feedback: ✅ SAFE, ⚠️ NEAR EXPIRY, or ❌ EXPIRED.
 
 ---
 
-## 📖 Medical Reference & Global Standards
-The expiry logic in this tool is primarily based on:
-> **NHS Guidance Sheet 6 – Storage and Expiry Dates**
+## 📖 Medical Reference & Guideline Comparison
+The logic in this tool is inspired by publicly available guidance documents:
 
-### 🔬 Comparative Analysis: NHS vs. USP
-As a pharmacist, I understand that standards vary depending on the country and clinical context:
+### ⚖ Scope & Regulatory Clarification
 
-* **NHS (UK/Europe):** Recommends a strict **30-day limit** for decanted (repacked) medicines. This aligns with Europe's climate (Zone I/II) and prioritizes maximum drug stability once the original seal is broken.
-* **USP (USA/Thailand):** In countries like Thailand, the **USP standard** is often used, which may allow for up to **4 months (120 days)**. This is a practical adjustment for healthcare systems with high patient volumes and different resource management needs.
+This tool is designed as an educational comparison of publicly available guidance (NHS and Thai FDA/USP-based frameworks). 
 
-### 🌡️ The Climate Factor (Why I chose the stricter 30-day rule)
-Thailand is in **Climate Zone IVb (Hot & Very Humid)**, while Europe is in **Zone I/II (Temperate)**. High humidity significantly accelerates medicine degradation once removed from the original blister pack. 
+It does not replace:
+• Product-specific Summary of Product Characteristics (SPC / Fachinformation)
+• National pharmacy compounding standards (e.g., DAC/NRF in Germany)
+• Individual manufacturer storage instructions
 
-Even though local guidelines might allow for a longer period (USP), I have intentionally implemented the **stricter 30-day NHS standard** in this tool. This ensures the highest level of **Patient Safety**, especially in home environments where storage conditions (temperature and humidity) cannot always be strictly controlled.
+Expiry rules may vary depending on formulation, preservatives, packaging type, and national regulation. 
 
-### ⏳ Example Expiry Rules After Opening (Used in this Tool)
-| Formulation | Suggested Expiry | Note |
-| :--- | :--- | :--- |
-| MDS / Weekly Blister Pack | 56 Days | |
-| Oral Liquids / Syrup | 6 Months | |
-| Decanted / Repacked | 30 Days | Strict Safety Choice (NHS) |
-| Eye, Ear, Nose Drops | 28 Days | |
-| Topical Cream (Tube) | 3 Months | |
-| Insulin (In Use) | 28 Days | |
+The implemented logic represents simplified safety-oriented interpretations for learning and demonstration purposes.
+
+### 🔬 Comparative Analysis: NHS vs. Thai FDA (USP 795)
+As a pharmacist, I understand that stability guidelines must adapt to local contexts:
+
+* **NHS (UK/Europe):** Optimized for Climate Zone I/II (Temperate). It offers a balanced approach for stable environments.
+* **Thai FDA (Thailand):** Based on USP 795 and adapted for Climate Zone IVb (Hot & Very Humid).
+    * **The Liquid Paradox:** Unlike the NHS, the Thai FDA is significantly stricter on Repacked Oral Liquids (14 days) because high humidity and temperature dramatically increase the risk of microbial growth.
+    * **Repacked Solids:** Conversely, it allows up to 6 months (180 days) for tablets/powders in certain conditions, whereas European standards often suggest stricter limits for MDS packs.
+
+### ⏳ Example Expiry Rules (Implemented Logic)
+
+| Formulation | NHS (UK/EU) | Thai FDA (USP) | Note |
+| :--- | :--- | :--- | :--- |
+| MDS / Weekly Blister | 56 Days | 180 Days | Based on local solid stability |
+| Oral Liquids (Repacked) | 180 Days | 14 Days | Strict microbial control (Zone IVb) |
+| Decanted Medicine | 30 Days | 180 Days | Standard vs. Safety Choice |
+| Eye / Ear Drops | 28 Days | 30 Days | Global standard for multi-dose |
+| Creams (Aqueous) | 30 Days | 30 Days | High water activity limits |
+| Insulin (In Use) | 28 Days | 28 Days | Standard protein stability |
 
 ---
 
 ## ⚠️ If the Opening Date Is Unknown
-If someone does not remember the opening date:
-* Use the dispensing date as a rough reference.
-* Discard the medicine if appearance or smell has changed.
-* Ask a pharmacist if unsure.
-* Write the opening date clearly on the label next time.
-
-**Safety should always come first.**
+* Use the dispensing date as a rough reference point.
+* **Observe Physical Changes:** Discard immediately if the smell, color, or texture has changed.
+* **Write it down:** Always record the opening date on the label for future safety.
+* **Consult a Pharmacist:** When in doubt, safety always comes first.
 
 ---
 
 ## 🚀 How to Use
-1. Run the Python script `med_tracker.py`.
-2. Select your medication type from the menu (1-12).
-3. Enter the opening date in **DD/MM/YYYY** format.
-4. The system will calculate the expiry and alert you if the medicine is safe or must be discarded.
+1.  Run the Python script:
+    
+bash
+    python med_tracker.py
+    
+
+2.  Choose your preferred standard/language:
+    * 1 for English-Deutsch (NHS-EU)
+    * 2 for ภาษาไทย (Thai FDA-USP)
+3.  Select the medication type from the menu (1-12).
+4.  Enter the opening date (`DD/MM/YYYY`).
+5.  The system will calculate the remaining days and display the safety status.
 
 ---
 
 ## 🛠 Technical Stack
-* **Python 3**
-* **`datetime` module**
-* **Command-line interface**
-* **Dictionary-based data structure**
+* **Language:** Python 3
+* **Modules:** datetime (For precise date arithmetic).
+* **Data Structure:** Dictionary-based dual-logic engine.
+* **Localization:** Fully supports English (EN), German (DE), and Thai (TH).
 
 ---
 
 ## 📌 What I Learned
-Through this project, I practiced:
-* **Domain Integration:** Translating written healthcare guidelines into logical software conditions.
-* **Data Engineering:** Structuring categorized medical data effectively.
-* **Risk Management:** Making informed decisions on which standards to implement based on safety analysis.
-* **Programming Skills:** Working with date calculations and designing user-centric CLI.
+* **Domain-Driven Design:** Translating complex medical PDFs and regulatory documents into functional code logic.
+* **Global Regulatory Analysis:** Comparing international pharmaceutical standards and understanding the "why" behind different safety margins (Climate factors).
+* **User-Centric Programming:** Designing a CLI that handles user errors (invalid dates) gracefully.
 
-**Development Note:**
-I used AI as a coding assistant while learning. The project idea, structure, and medical reasoning are based on my own professional experience and comparative research of global standards.
+> **Development Note:**
+> I used AI as a coding assistant while learning. The project idea, multilingual structure, and comparative medical reasoning are based on my professional experience as a pharmacist and research into global stability standards.
 
 ---
 
 ## 📚 Sources
-* **NHS Gloucestershire Health and Care** – Good Practice Guidance for Expiry Dates
-* **NHS Cheshire Formulary** – Storage and Expiry Dates Guidance (Sheet 6)
-* **ICH Q1A (R2):** Stability Testing of New Drug Substances and Products (Reference for Climate Zones)
+* **Thai FDA:** Guidelines for Assigning Beyond-Use Dates (BUD) for Medicinal Products in Healthcare Facilities (Ref: USP 795).
+* **NHS England:** Guidance Sheet 6 – Storage and Expiry Dates.
+* **ICH Q1A (R2):** Stability Testing Reference for Climate Zones.
 
 ---
 
