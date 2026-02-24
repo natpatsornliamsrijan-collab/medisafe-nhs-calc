@@ -1,75 +1,104 @@
 import time
 from datetime import datetime, timedelta
 
-# --- 1. Notification System ---
-def announce(text):
-    print(f"\n>>> {text.upper()} <<<")
-
-# --- 2. Medication Data (Updated with Temperature Guidance) ---
+# --- 1. ข้อมูลรายการยา (Data) ---
 CATEGORIES = {
-    "1": {"name": "MDS / Weekly Blister Pack (จัดแผงรายสัปดาห์ / Wöchentliche Blisterpackung)", "days": 56},
-    "2": {"name": "Original Manufacturer Blister (แผงฟอยล์เดิม / Originalblister)", "days": 365},
-    "3": {"name": "Decanted Medicine (แบ่งใส่ขวดใหม่ / Umgefüllte Medikamente)", "days": 30},
-    "4": {"name": "Oral Liquid / Syrup (ยาน้ำทั่วไป / Saft oder Sirup)", "days": 180},
-    
-    # --- ปรับปรุงข้อ 5: ยาปฏิชีวนะแยกตามอุณหภูมิ ---
-    "5": {"name": "Antibiotics (Room Temp) (ยาปฏิชีวนะผสมน้ำ-อุณหภูมิห้อง / Antibiotika bei Raumtemp)", "days": 7},
-    "6": {"name": "Antibiotics (Fridge) (ยาปฏิชีวนะผสมน้ำ-แช่เย็น / Antibiotika im Kühlschrank)", "days": 14},
-    
-    "7": {"name": "Topical Cream in Jar (ยาทากระปุก / Creme im Tiegel)", "days": 30},
-    "8": {"name": "Topical Tube - SKIN ONLY (ยาทาหลอด / Tube für die Haut)", "days": 90},
-    "9": {"name": "Standard Eye/Ear Drops (ยาหยอดตาหรือหู / Augen- oder Ohrentropfen)", "days": 28},
-    "10": {"name": "Single-use Units (ยาหยอดตารายวัน / Einzeldosen)", "days": 1},
-    "11": {"name": "Insulin Pen / Vial (อินซูลินที่กำลังใช้ / Insulin im Gebrauch)", "days": 28},
-    "12": {"name": "Inhaler / MDI (ยาพ่น / Inhalator)", "days": 365}
+    "1": {"en_de": "MDS / Weekly Blister Pack (Wöchentliche Blisterpackung)", "th": "ยาจัดแผงรายสัปดาห์ (MDS)", "days": 56},
+    "2": {"en_de": "Original Blister Pack (Originalblister)", "th": "ยาเม็ดในแผงฟอยล์เดิม", "days": 3650},
+    "3": {"en_de": "Repacked Medicine (Umgefüllte Medikamente)", "th": "ยาที่แบ่งใส่ขวดใหม่", "days": 30},
+    "4": {"en_de": "Oral Liquid / Syrup (Saft oder Sirup)", "th": "ยาน้ำทั่วไป / ยาน้ำเชื่อม", "days": 180},
+    "5": {"en_de": "Antibiotic Syrup - Room Temp (Antibiotika - Raumtemp.)", "th": "ยาปฏิชีวนะผสมน้ำ (อุณหภูมิห้อง)", "days": 7},
+    "6": {"en_de": "Antibiotic Syrup - Fridge (Antibiotika - Kühlschrank)", "th": "ยาปฏิชีวนะผสมน้ำ (ตู้เย็น)", "days": 14},
+    "7": {"en_de": "Cream in Jar (Creme im Tiegel)", "th": "ยาทากระปุก", "days": 30},
+    "8": {"en_de": "Cream/Ointment Tube (Creme / Salbe in der Tube)", "th": "ยาทาหลอด (ผิวหนัง)", "days": 90},
+    "9": {"en_de": "Eye / Ear Drops (Augen- / Ohrentropfen)", "th": "ยาหยอดตา / หู", "days": 28},
+    "10": {"en_de": "Single-dose Eye Drops (Einzeldosis-Augentropfen)", "th": "ยาหยอดตาหลอดเล็ก (SDU)", "days": 1},
+    "11": {"en_de": "Insulin - In Use (Insulin - im Gebrauch)", "th": "อินซูลินที่กำลังใช้งาน", "days": 28},
+    "12": {"en_de": "Inhaler / MDI (Inhalator)", "th": "ยาพ่น (Inhaler)", "days": 3650}
 }
 
 def start_app():
+    # เลือกภาษาเพียงครั้งเดียวตอนเริ่มโปรแกรม
     print("========================================")
-    print("    MEDISAFE: NHS STORAGE GUIDANCE      ")
+    print("      MED-TRACKER: EXPIRY HELPER        ")
     print("========================================")
-    print("Welcome. This tool helps you check medicine expiry dates.")
+    print("Choose Language / Sprache wählen:")
+    print("1. English / Deutsch")
+    print("2. ภาษาไทย (Thai)")
     
-    print("\nPLEASE SELECT A CATEGORY:")
-    for key, val in CATEGORIES.items():
-        print(f"  [{key}] {val['name']}")
+    lang_choice = input("\nSelect (1/2): ")
+    is_thai = lang_choice == "2"
 
-    choice = input("\nSELECT NUMBER (1-12): ")
-
-    if choice in CATEGORIES:
-        selected = CATEGORIES[choice]
-        announce(f"Selected: {selected['name']}")
+    # เริ่มระบบวนลูปตรวจสอบยา
+    while True:
+        menu_title = "--- SELECT CATEGORY ---" if not is_thai else "--- เลือกหมวดหมู่ยา ---"
+        print(f"\n{menu_title}")
         
-        # --- คำแนะนำเพิ่มเติมเรื่องตู้เย็น ---
-        if choice == "6":
-            print("(!) Note: Store between 2°C and 8°C. Do not freeze.")
-        elif choice == "7":
-            print("(!) Warning: For skin use only. Do not put in eyes.")
+        for key, val in CATEGORIES.items():
+            name = val['th'] if is_thai else val['en_de']
+            print(f"  [{key}] {name}")
 
-        print("\n--- ENTER DATE OF OPENING ---")
-        try:
-            d = int(input("DAY   (DD):   "))
-            m = int(input("MONTH (MM):   "))
-            y = int(input("YEAR  (YYYY): "))
+        choice = input("\nChoice (1-12) [or 'q' to quit]: ")
+        
+        # กด q เพื่อออกจากโปรแกรม
+        if choice.lower() == 'q':
+            break
+
+        if choice in CATEGORIES:
+            item = CATEGORIES[choice]
+            days = item['days']
             
-            open_date = datetime(y, m, d)
-            expiry_date = open_date + timedelta(days=selected['days'])
-            days_left = (expiry_date - datetime.now()).days
-
-            print("\n" + "*"*45)
-            if days_left < 0:
-                print("!!!  WARNING: EXPIRED - DISCARD IMMEDIATELY  !!!")
-                print(f"Expired on: {expiry_date.strftime('%d/%m/%Y')}")
+            if days > 1000:
+                msg = ">>> Follow Manufacturer's Expiry Date <<<" if not is_thai else ">>> ใช้ตามวันหมดอายุที่ระบุบนกล่อง <<<"
+                print(f"\n{msg}")
             else:
-                print("            STATUS: SAFE TO USE            ")
-                print(f"Calculated Expiry: {expiry_date.strftime('%d/%m/%Y')}")
-                print(f"Days remaining: {days_left} days")
-            print("*"*45)
+                try:
+                    prompt = "Enter Opening Date:" if not is_thai else "กรอกวันที่เริ่มเปิดใช้งาน:"
+                    print(f"\n{prompt}")
+                    d = int(input("  DD: "))
+                    m = int(input("  MM: "))
+                    y = int(input("  YYYY: "))
+                    
+                    open_date = datetime(y, m, d)
+                    expiry_date = open_date + timedelta(days=days)
+                    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+                    days_left = (expiry_date - today).days
 
-        except ValueError:
-            print("\nError: Invalid date format.")
-    else:
-        print("\nError: Invalid choice.")
+                    print("\n" + "*"*45)
+                    if days_left < 0:
+                        if not is_thai:
+                            print("!!! EXPIRED (ABGELAUFEN) !!!")
+                            print(f"Status: Please discard. Expired on: {expiry_date.strftime('%d/%m/%Y')}")
+                        else:
+                            print("!!! ยาหมดอายุแล้ว !!!")
+                            print(f"สถานะ: ควรทิ้งทันที (หมดอายุเมื่อ: {expiry_date.strftime('%d/%m/%Y')})")
+                    else:
+                        if not is_thai:
+                            print("STATUS: SAFE TO USE (SICHER)")
+                            print(f"EXPIRY (ABLAUFDATUM): {expiry_date.strftime('%d/%m/%Y')}")
+                            print(f"REMAINING: {days_left} Days (Tage)")
+                        else:
+                            print("สถานะ: ✅ ยังใช้ได้")
+                            print(f"วันหมดอายุ: {expiry_date.strftime('%d/%m/%Y')}")
+                            print(f"เหลืออีก: {days_left} วัน")
+                    print("*"*45)
+
+                except ValueError:
+                    err = "Invalid date!" if not is_thai else "วันที่ไม่ถูกต้อง!"
+                    print(f"\nError: {err}")
+            
+            # ถามว่าต้องการตรวจสอบยาตัวอื่นต่อไหม
+            again_prompt = "\nCheck another item? (y/n): " if not is_thai else "\nตรวจสอบรายการอื่นต่อไหม? (y/n): "
+            again = input(again_prompt)
+            if again.lower() != 'y':
+                break
+        else:
+            err_choice = "Invalid selection!" if not is_thai else "เลือกไม่ถูกต้อง!"
+            print(f"\nError: {err_choice}")
+
+    # ข้อความบอกลา
+    bye = "Goodbye! / Auf Wiedersehen!" if not is_thai else "ขอบคุณที่ใช้งานค่ะ!"
+    print(f"\n{bye}")
 
 if __name__ == "__main__":
     start_app()
